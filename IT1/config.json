@@ -1,0 +1,8 @@
+{
+  "MailSettings": {
+    "ToAddress": "tony.pierson@gmail.com"
+  },
+  "ConnectionStrings": {
+    "SqlConnection": "Server=(localdb)\\MSSQLLocalDB;Database=IT1Db;Trusted_Connection=true;MultipleActiveResultSets=true;"
+  }
+}
