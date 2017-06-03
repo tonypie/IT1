@@ -10,8 +10,8 @@ namespace IT1.ViewModels
     {
         [Required]
         [StringLength(100, MinimumLength = 10)]
-        public string Name { get; set; }
+        public string Company { get; set; }
 
-        public DateTime Created { get; set; } = DateTime.UtcNow;
+        public DateTime StartDate { get; set; } = DateTime.UtcNow;
     }
 }

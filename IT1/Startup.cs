@@ -11,6 +11,9 @@ using Microsoft.Extensions.Configuration;
 using IT1.Services;
 using IT1.Models;
 using Newtonsoft.Json.Serialization;
+using AutoMapper;
+using IT1.ViewModels;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace IT1
 {
@@ -37,6 +40,17 @@ namespace IT1
         {
             services.AddSingleton(_config);
 
+            services.AddMvc()
+                .AddJsonOptions(config => config.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
+
+            services.AddIdentity<IT1User, IdentityRole>(config =>
+               {
+                   config.User.RequireUniqueEmail = true;
+                   config.Password.RequiredLength = 8;
+                   config.Cookies.ApplicationCookie.LoginPath = "/Auth/Login";
+               }
+            ).AddEntityFrameworkStores<AuthContext>();
+
             if (_env.IsDevelopment())
             {
                 services.AddScoped<IMailService, DebugMailService>();
@@ -46,13 +60,15 @@ namespace IT1
                 //implement real mail service!!
             }
 
-            //services.AddDbContext<IT1Context>();
+
+            services.AddDbContext<IT1Context>();
+            services.AddDbContext<AuthContext>();
+
             services.AddScoped<IIT1Repository, IT1Repository>();
 
             services.AddTransient<IT1ContextSeedData>();
 
-            services.AddMvc()
-                .AddJsonOptions(config => config.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,12 +78,23 @@ namespace IT1
             , IT1ContextSeedData seeder
         )
         {
+            Mapper.Initialize(config =>
+                config.CreateMap<ExperienceViewModel, Experience>().ReverseMap()
+            );
+
             loggerFactory.AddConsole();
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            
+            
+            //app.UseDefaultFiles();
+            app.UseStaticFiles();
+
+            app.UseIdentity();
 
             app.UseMvc(config =>
                 config.MapRoute(
@@ -76,9 +103,6 @@ namespace IT1
                     defaults: new { controller = "App", action = "Index" }
                 )
             );
-            
-            //app.UseDefaultFiles();
-            app.UseStaticFiles();
 
             //app.Run(async (context) =>
             //{

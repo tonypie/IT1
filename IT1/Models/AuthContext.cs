@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -7,12 +8,11 @@ using System.Threading.Tasks;
 
 namespace IT1.Models
 {
-    public class IT1Context : DbContext
+    public class AuthContext : IdentityDbContext<IT1User>
     {
         private IConfigurationRoot _config;
-        public DbSet<Experience> Experiences { get; set; }
 
-        public IT1Context(IConfigurationRoot config, DbContextOptions<IT1Context> options)
+        public AuthContext(IConfigurationRoot config, DbContextOptions<AuthContext> options)
             : base(options)
         {
             _config = config;

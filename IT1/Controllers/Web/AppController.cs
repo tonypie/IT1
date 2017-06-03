@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using IT1.Models;
+using IT1.ViewModels;
 using IT1.Services;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authorization;
 
 namespace IT1.Controllers.Web
 {
@@ -24,10 +26,7 @@ namespace IT1.Controllers.Web
 
         public IActionResult Index()
         {
-
-            var data = _repository.GetAllExperiences();
-
-            return View(data);
+            return View();
         }
 
         public IActionResult Skills()
@@ -35,9 +34,11 @@ namespace IT1.Controllers.Web
             return View();
         }
 
+        [Authorize]
         public IActionResult Experience()
         {
-            return View();
+            var data = _repository.GetAllExperiences();
+            return View(data);
         }
 
         public IActionResult About()
