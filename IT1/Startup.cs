@@ -14,6 +14,9 @@ using Newtonsoft.Json.Serialization;
 using AutoMapper;
 using IT1.ViewModels;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.CodeAnalysis;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace IT1
 {
@@ -40,14 +43,36 @@ namespace IT1
         {
             services.AddSingleton(_config);
 
-            services.AddMvc()
-                .AddJsonOptions(config => config.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
+            services.AddMvc(config =>
+            {
+                if (_env.IsProduction())
+                    config.Filters.Add(new RequireHttpsAttribute());
+            })
+            .AddJsonOptions(config => config.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
 
             services.AddIdentity<IT1User, IdentityRole>(config =>
                {
                    config.User.RequireUniqueEmail = true;
                    config.Password.RequiredLength = 8;
                    config.Cookies.ApplicationCookie.LoginPath = "/Auth/Login";
+                   config.Cookies.ApplicationCookie.AutomaticChallenge = true;
+                   config.Cookies.ApplicationCookie.Events = new CookieAuthenticationEvents()
+                   {
+                       OnRedirectToLogin =  async context =>
+                       {
+                           if (context.Request.Path.StartsWithSegments("/api") &&
+                                context.Response.StatusCode == 200)
+                           {
+                               context.Response.StatusCode = 401;
+                           }
+                           else
+                           {
+                               context.Response.Redirect(context.RedirectUri);
+                           }
+
+                           await Task.Yield();
+                       }
+                   };
                }
             ).AddEntityFrameworkStores<AuthContext>();
 

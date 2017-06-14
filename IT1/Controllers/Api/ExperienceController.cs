@@ -8,6 +8,7 @@ using IT1.ViewModels;
 using IT1.Models;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace IT1.Controllers.Api
 {
@@ -16,9 +17,9 @@ namespace IT1.Controllers.Api
     public class ExperienceController : Controller
     {
         private IIT1Repository _repository;
-        private ILogger _logger;
+        private ILogger<ExperienceController> _logger;
 
-        public ExperienceController(IIT1Repository repository, ILogger logger)
+        public ExperienceController(IIT1Repository repository, ILogger<ExperienceController> logger)
         {
             _repository = repository;
             _logger = logger;
@@ -32,6 +33,7 @@ namespace IT1.Controllers.Api
 
         //This is better because you can return other result codes such as 404 not found or 400 Bad Request
         [HttpGet]
+        [Authorize]
         public IActionResult Get()
         {
             //if (true) return BadRequest("Bad things happen!!");

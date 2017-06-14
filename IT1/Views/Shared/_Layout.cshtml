@@ -11,12 +11,25 @@
 <body>
     <div id="top-menu" class="menu top-menu">
         <img src="https://sd.keepcalm-o-matic.co.uk/i-w600/keep-calm-i-am-net-developer.jpg" alt="KeepCalm" class="menuIcon" />
+        @if (User.Identity.IsAuthenticated)
+        {
+            <p>User @User.Identity.Name is signed in. <a href="/Auth/Logout">Logout</a> </p>
+
+        }
+        else
+        {
+            <p>No user is signed in.</p>
+        }
         <ul>
             <li class="active"><A asp-controller="App" asp-action="Index">Home</A></li>
             <li><A asp-controller="App" asp-action="Skills">Skills</A></li>
             <li><A asp-controller="App" asp-action="Experience">Experience</A></li>
             <li><A asp-controller="App" asp-action="About">About</A></li>
             <li><A asp-controller="App" asp-action="Contact">Contact Us</A></li>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <li><A asp-controller="Auth" asp-action="Logout">Logout</A></li>
+            }
         </ul>
     </div>
     <!--<div id="side-menu" class="menu side-menu">-->
@@ -27,6 +40,10 @@
             <li><A asp-controller="App" asp-action="Experience">Experience</A></li>
             <li><A asp-controller="App" asp-action="About">About</A></li>
             <li><A asp-controller="App" asp-action="Contact">Contact Us</A></li>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <li><A asp-controller="Auth" asp-action="Logout">Logout</A></li>
+            }
         </ul>
     </div>
     <div id="wrapper">

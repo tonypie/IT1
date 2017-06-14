@@ -1,0 +1,39 @@
+﻿@section scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/angular/angular.min.js"></script>
+    <script src="~/js/app-it1.js"></script>
+    <script src="~/js/aboutController.js"></script>
+}
+    <div data-ng-app="app-it1">
+        <p>{{2+2}}</p>
+        <div ng-controller="aboutController as vm">
+            <div>{{vm.name}}</div>
+            <table class="table table-responsive table-striped">
+                <tr ng-repeat="office in vm.offices">
+                    <td>{{office.location}}</td>
+                    <td>{{office.contactNo}}</td>
+                </tr>
+            </table>
+            <div ng-repeat="office in vm.offices">
+                <div><span>{{office.location}}</span><span>{{office.contactNo}}</span></div>
+            </div>
+        
+            <form novalidate name="newLocationForm" ng-submit="vm.addLocation()">
+                <div>
+                    <label for="name">Location</label>
+                    <input type="text" id="name" name="name" ng-model="vm.newLocation.location" required ng-minlength="5" />
+                    <span ng-show="newLocationForm.location.$error.required">Location is required</span>
+                    <span ng-show="newLocationForm.location.$error.minlength">Location has to be at least 4 characters.</span>
+                </div>
+                <div>
+                    <label for="contactNo">Contact No</label>
+                    <input type="tel" id="contactNo" name="contactNo" ng-model="vm.newLocation.contactNo" />
+                </div>
+                <div>
+                    <input type="submit" value="Save" ng-disabled="newLocationForm.$invalid" />
+                </div>
+            </form>
+         </div>
+        
+</div>
