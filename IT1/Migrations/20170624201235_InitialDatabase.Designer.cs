@@ -8,9 +8,10 @@ using IT1.Models;
 namespace IT1.Migrations
 {
     [DbContext(typeof(IT1Context))]
-    partial class IT1ContextModelSnapshot : ModelSnapshot
+    [Migration("20170624201235_InitialDatabase")]
+    partial class InitialDatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")

@@ -34,5 +34,13 @@ namespace IT1.Models
         {
             return (await _context.SaveChangesAsync()) > 0;
         }
+
+        public IEnumerable<Experience> GetExperiencesByUserId(string userId)
+        {
+            _logger.LogInformation($"Getting Experiences for {userId} from DB");
+            return _context.Experiences
+                .Where(x => x.UserId == userId)
+                .ToList();
+        }
     }
 }

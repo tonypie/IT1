@@ -37,8 +37,9 @@ namespace IT1.Controllers.Web
         [Authorize]
         public IActionResult Experience()
         {
-            var data = _repository.GetAllExperiences();
-            return View(data);
+            //var data = _repository.GetAllExperiences();
+            //return View(data);
+            return View();
         }
 
         public IActionResult About()

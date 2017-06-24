@@ -19,7 +19,7 @@ namespace IT1.Models
 
         public async Task EnsureSeedData()
         {
-            if(await _userManager.FindByEmailAsync("tony.pierson@gmail.com") == null)
+            if (await _userManager.FindByEmailAsync("tony.pierson@gmail.com") == null)
             {
                 var user = new IT1User()
                 {
@@ -30,23 +30,25 @@ namespace IT1.Models
 
                 await _userManager.CreateAsync(user, "12345Qwerty!");
 
-            }
-
-            if(!_context.Experiences.Any())
-            {
-                Experience e = new Experience()
+                if(!_context.Experiences.Any())
                 {
-                    Company = "Platinum Funding",
-                    Description = "Description of work",
-                    EndDate = new DateTime(2006, 10, 27),
-                    StartDate = new DateTime(2005, 10, 1),
-                    order = 5,
-                    SkillsUsed = "ASP.NET, HTML, CSS, Javascript"
-                };
+                    var userId = await _userManager.GetUserIdAsync(user);
 
-                _context.Experiences.Add(e);
+                    Experience e = new Experience()
+                    {
+                        Company = "Platinum Funding",
+                        Description = "Description of work",
+                        EndDate = new DateTime(2006, 10, 27),
+                        StartDate = new DateTime(2005, 10, 1),
+                        Order = 5,
+                        SkillsUsed = "ASP.NET, HTML, CSS, Javascript",
+                        UserId = userId
+                    };
 
-                await _context.SaveChangesAsync();
+                    _context.Experiences.Add(e);
+
+                    await _context.SaveChangesAsync();
+                }
             }
         }
     }

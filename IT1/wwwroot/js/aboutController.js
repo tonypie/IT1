@@ -1,4 +1,4 @@
-﻿//appController.js
+﻿//aboutController.js
 
 (function ()
 {

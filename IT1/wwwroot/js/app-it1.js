@@ -1,9 +1,8 @@
 ﻿//app-it1.js
 
-"use strict";
-
 (function () {
+    "use strict";
 
-    angular.module("app-it1", []);
+    angular.module("app-it1", [/*"$http"*/]);
 
 })();

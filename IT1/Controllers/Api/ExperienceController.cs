@@ -9,6 +9,8 @@ using IT1.Models;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace IT1.Controllers.Api
 {
@@ -17,11 +19,15 @@ namespace IT1.Controllers.Api
     public class ExperienceController : Controller
     {
         private IIT1Repository _repository;
+        private UserManager<IT1User> _userManager;
+        private IHttpContextAccessor _httpContextAccessor;
         private ILogger<ExperienceController> _logger;
 
-        public ExperienceController(IIT1Repository repository, ILogger<ExperienceController> logger)
+        public ExperienceController(IIT1Repository repository, UserManager<IT1User> userManager, IHttpContextAccessor httpContextAccessor, ILogger<ExperienceController> logger)
         {
             _repository = repository;
+            _userManager = userManager;
+            _httpContextAccessor = httpContextAccessor;
             _logger = logger;
         }
 
@@ -38,16 +44,20 @@ namespace IT1.Controllers.Api
         {
             //if (true) return BadRequest("Bad things happen!!");
 
-            return Ok(Mapper.Map<IEnumerable<ExperienceViewModel>>(_repository.GetAllExperiences()));
+            return Ok(Mapper.Map<IEnumerable<ExperienceViewModel>>(_repository.GetExperiencesByUserId(_httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value)));
         }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]ExperienceViewModel experience)
         {
-            var newExperience = Mapper.Map<Experience>(experience);
-
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
+                var newExperience = Mapper.Map<Experience>(experience);
+
+                var user = await _userManager.GetUserAsync(HttpContext.User);
+
+                var userId = user?.Id;
+
                 //TODO Add to context to save to DB
                 _repository.AddExperience(newExperience);
 

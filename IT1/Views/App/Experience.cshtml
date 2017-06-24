@@ -1,14 +1,49 @@
 @{
     ViewBag.Title = "Experiences";
 }
+@section scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/angular/angular.min.js"></script>
+    <script src="~/js/app-it1.js"></script>
+    <script src="~/js/experienceController.js"></script>
+}
+<div class="row" data-ng-app="app-it1">
+    <div ng-controller="experienceController as vm">
+        <div ng-repeat="experience in vm.experiences">
+            <div>{{experience.company}}</div>
+            <div>{{experience.startDate | date:"dd-MM-yyyy"}}</div>
+        </div>
+        <span ng-show="vm.errorMessage">{{vm.errorMessage}}</span>
+        <button type="button" ng-click="vm.AddExperienceToggle()">Add a new experience...</button>
 
-<!DOCTYPE html>
+        <div class="form-group" ng-show="vm.addNew">
+            <form novalidate ng-submit="vm.addExperience()">
+                <div class="col-md-8 col-md-offset-2">
+                    <div>
+                        <label>Company</label>
+                        <input id="company" name="company" type="text" class="form-control" ng-model="vm.newExperience.company" />
+                    </div>
+                    <div>
+                        <label>Start Date</label>
+                        <input type="date" ng-model="vm.newExperience.startDate" />
+                        <label>End Date</label>
+                        <input type="date" ng-model="vm.newExperience.endDate" />
+                    </div>
+                    <div>
+                        <label>Skills Used</label>
+                        <textarea class="form-control" cols="40" rows="4" ng-model="vm.newExperience.skillsUsed"></textarea>
+                    </div>
+                    <div>
+                        <label>Description</label>
+                        <textarea class="form-control" cols="40" rows="4" ng-model="vm.newExperience.description"></textarea>
+                    </div>
+                    <div>
+                        <input class="btn-success" type="submit" value="Add" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Experience</title>
-</head>
-<body>
-</body>
-</html>
